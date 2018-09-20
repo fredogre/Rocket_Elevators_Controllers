@@ -55,10 +55,10 @@ END SEQUENCE
 
 ----  Is the elevator at the floor where I request it? Is the direction of the elevator where I am going?  -----
 
-SEQUENCE FindElevator (Direction, Floor) 
+SEQUENCE FindElevator (Direction, Floor)  ***********************************************
     WHILE Elevator NOT Found 
         FOR EACH Elevator IN Elevators 
-            IF Floor = ElevatorFloor AND Status Is Stopped AND ElevatorDirection is Direction THEN
+            IF Floor = ElevatorFloor AND Status Is Stopped AND ElevatorDirection IS Direction THEN
                     RETURN Elevator
                 ELSE IF Status IS Idle AND Floor = ElevatorFloor THEN
                     RETURN Elevator   
@@ -67,7 +67,11 @@ SEQUENCE FindElevator (Direction, Floor)
                 ELSE IF Direction IS GoingDown AND ElevatorDirection IS Direction AND Floor < ElevatorFloor THEN 
                     RETURN Elevator 
             END IF 
-         END FOR 
+            END FOR
+            READ Elevator with shortest floor list from Elevators
+            RETURN Elevator
+    END WHILE
+END SEQUENCE
 
 
 SEQUENCE RequestElevator (Elevator, RequestedFloor)                      
@@ -141,3 +145,6 @@ SEQUENCE ReturnIdle (TimeOfDay, Floor)                          ******
     Idle = AVERAGE Floor 
  END IF 
 
+SEQUENCE CheckWeight (Elevator, Weight)
+ COMPUTE Weight 
+ IF Weight > MAX Weight THEN
