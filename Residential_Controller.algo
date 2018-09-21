@@ -114,12 +114,28 @@ END SEQUENCE
 
 ----- Close the Doors -----
 SEQUENCE CloseDoor (Elevator)
-    IF Door IS Closing AND NOT Obstructed 
+    IF Door IS Closing AND NOT Obstructed AND NOT Overweight 
     THEN
         CALL RequestElevator                                    
     ELSE 
         CALL OpenDoor (Elevator)
     END IF
+END SEQUENCE
+
+SEQUENCE Obstructed
+   READ Captor FROM Door
+   IF Obstructed 
+      RETURN TRUE 
+   ELSE RETURN FALSE 
+   END IF 
+END SEQUENCE 
+
+SEQUENCE Overweight
+   READ Weight FROM Balance 
+   IF Weight > Max Weight THEN
+   RETURN TRUE 
+   ELSE RETURN FALSE
+   END IF 
 END SEQUENCE
 
 

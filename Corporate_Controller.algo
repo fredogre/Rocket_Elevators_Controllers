@@ -1,0 +1,111 @@
+
+
+
+
+SEQUENCE CallElevator (Direction, Floor) 
+    CALL ActivateExtButton (Direction, Floor) 
+    CALL FindElevator (Direction, Floor) RETURNING Elevator 
+    CALL RequestElevator (Elevator, Floor) 
+END SEQUENCE
+
+SEQUENCE ActivateExtButton (Direction, Floor)   
+    CALL FindExtButton (Direction, Floor) RETURNING button
+    SET button Active 
+END SEQUENCE
+
+SEQUENCE DeactivateExtButton (Direction, Floor)   
+    CALL FindExtButton (Direction, Floor) RETURNING button
+    SET button NotActive 
+END SEQUENCE
+
+SEQUENCE FindExtButton (Direction, Floor) 
+    FOR EACH button IN ExternalButtons 
+        IF Floor = ButtonFloor AND Direction = ButtonDirection 
+        THEN RETURN button 
+        END IF
+    END FOR 
+END SEQUENCE 
+
+SEQUENCE FindElevator (Direction, Floor)  **** 
+   CASE For Floors [1-20]
+    WHILE Elevator NOT Found 
+        FOR EACH Elevator IN Column2 
+            CALL RetrieveElevator RETURNING elevator
+        END FOR 
+        READ Elevator with shortest FloorList from Column2    ****COLUMN 2 OR ELEVATORS
+    END WHILE 
+   END CASE 
+
+   CASE For Floors [20-40]
+   WHILE Elevator NOT Found 
+        FOR EACH Elevator IN Column3
+            CALL RetrieveElevator RETURNING elevator
+        END FOR 
+        READ Elevator with shortest Floorlist from Column3   **** COLUMN 3 OR ELEVATORS
+    END WHILE 
+   END CASE 
+
+   CASE For Floors [40-60]
+   WHILE Elevator NOT Found 
+        FOR EACH Elevator IN Column4
+            CALL RetrieveElevator RETURNING elevator
+        END FOR 
+        READ Elevator with shortest FloorList from Column3   **** COLUMN 4 OR ELEVATORS
+    END WHILE 
+   END CASE 
+END SEQUENCE
+
+SEQUENCE RetrieveElevator
+    IF Floor = ElevatorFloor AND Status IS Stopped AND ElevatorDirection IS Direction THEN              **** STATUS?????? 
+        RETURN Elevator
+    ELSE IF Status IS Idle AND Floor = ElevatorFloor THEN
+        RETURN Elevator   
+    ELSE IF Floor < ElevatorFloor AND Elevator Status IS Stopped AND Direction IS GoingDown THEN 
+        RETURN Elevator
+    ELSE IF Floor < ElevatorFloor AND Elevator Status IS Idle THEN 
+        RETURN Elevator 
+    ELSE IF Floor < ElevatorFloor AND Elevator Status IS Stopped AND Direction IS GoingUp THEN 
+       RETURN Elevator 
+    ELSE IF Floor > ElevatorFloor AND Elevator Direction IS GoingUp THEN
+       RETURN Elevator
+    ELSE IF Floor > ElevatorFloor AND Elevator Direction IS GoingDown THEN 
+       RETURN Elevator 
+    END IF
+END SEQUENCE
+
+SEQUENCE RequestElevator (Elevator, RequestedFloor)
+  CASE For Floors [1-20]
+    ADD RequestedFloor TO Column1FloorList
+    CALL SortFloorList (Column1Floorlist, Direction) RETURNING SortedFloorList
+    SET FloorList TO SortedFloorList
+    CALL OperateElevator
+END SEQUENCE
+
+SEQUENCE OperateElevator (Elevator)                                  
+ WHILE SortedFloorList IS NOT Empty                               ***
+    READ RequestedFloor From SortedFloorList 
+      IF ElevatorFloor IS RequestedFloor THEN           
+        CALL OpenDoor (Elevator)                              
+      ELSE IF ElevatorFloor > RequestedFloor THEN    
+        CALL MoveDown (Elevator, RequestedFloor)
+      ELSE IF ElevatorFloor < RequestedFloor THEN 
+        CALL MoveUp (Elevator, RequestedFloor)
+      END IF 
+ END WHILE                                                   ****
+ CALL ReturnIdle (Elevator, Floor)                               ****
+END SEQUENCE
+
+SEQUENCE ReturnIdle (Elevator, Floor)    *** Here I want to set the idle status for 2 elevators on first floor before 10 am, the other elevator is idle at floor 10.
+And after 3pm, I want to set the idle status for 2 elevators on last floor and the other elevator is idle in between. ****************
+
+ CASE For Floors [1-20]  
+  WHILE TimeOfDay <=10 
+   SET Idle TO Floor 1
+  END WHILE 
+ END CASE
+ 
+ CASE For Floors [20-40]   
+ WHILE TimeOfDay <=10
+  SET Idle TO Floor 20
+END WHILE 
+ WHILE TimeOfDay >=
