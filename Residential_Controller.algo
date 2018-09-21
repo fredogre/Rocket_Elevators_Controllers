@@ -63,7 +63,6 @@ SEQUENCE FindElevator (Direction, Floor)
     END WHILE
 END SEQUENCE
 
-
 SEQUENCE RequestElevator (Elevator, RequestedFloor)                      
     ADD RequestedFloor TO FloorList
     CALL SortFloorList (Floorlist, Direction) RETURNING SortedFloorList
@@ -84,7 +83,6 @@ SEQUENCE OperateElevator (Elevator)
  END WHILE                                                  
  CALL ReturnIdle (Elevator, Floor)                               
 END SEQUENCE
-
 
 SEQUENCE SortFloorList (FloorList, Direction) 
     SORT FloorList BY Direction THEN RETURN Floorlist

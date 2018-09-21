@@ -168,8 +168,6 @@ SEQUENCE RushHour (Elevator)
      ELSE 
       CALL RequestElevator (Elevator, 1)
 END SEQUENCE 
-   
----- Classic Method For Sublevels ----
 
 SEQUENCE CallInsideElevator (Elevator, RequestedFloor)  
     CALL ActivateIntButton (Direction, RequestedFloor) 
