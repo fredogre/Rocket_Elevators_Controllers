@@ -1,17 +1,13 @@
------Outside the elevator, what happens when someone presses a button----
 SEQUENCE CallElevator (Direction, Floor) 
     CALL ActivateExtButton (Direction, Floor) 
     CALL FindElevator (Direction, Floor) RETURNING Elevator 
     CALL RequestElevator (Elevator, Floor) 
 END SEQUENCE
 
-----Inside the elevator, what happens when someone presses a button-----    
-SEQUENCE CallInsideElevator (Elevator, RequestedFloor) 
+SEQUENCE CallInsideElevator (Elevator, RequestedFloor)  
     CALL ActivateIntButton (Direction, RequestedFloor) 
     CALL RequestElevator (Elevator, RequestedFloor) 
 END SEQUENCE
-
--------- Exterior buttons Active or NotActive--------
 
 SEQUENCE ActivateExtButton (Direction, Floor)   
     CALL FindExtButton (Direction, Floor) RETURNING button
@@ -31,8 +27,6 @@ SEQUENCE FindExtButton (Direction, Floor)
     END FOR 
 END SEQUENCE 
 
------- Interior button Active or NotActive -------  
-
 SEQUENCE ActivateIntButton (Elevator, Floor)   
     CALL FindIntButton (Elevator, Floor) RETURNING button
     SET button Active 
@@ -49,13 +43,9 @@ SEQUENCE FindIntbutton (Elevator, Floor)
         THEN RETURN button 
         END IF
     END FOR 
-        
 END SEQUENCE 
 
-
-----  Is the elevator at the floor where I request it? Is the direction of the elevator where I am going?  -----
-
-SEQUENCE FindElevator (Direction, Floor)  ***********************************************
+SEQUENCE FindElevator (Direction, Floor)  
     WHILE Elevator NOT Found 
         FOR EACH Elevator IN Elevators 
             IF Floor = ElevatorFloor AND Status Is Stopped AND ElevatorDirection IS Direction THEN
@@ -82,7 +72,7 @@ SEQUENCE RequestElevator (Elevator, RequestedFloor)
 END SEQUENCE
 
 SEQUENCE OperateElevator (Elevator)                                  
- WHILE SortedFloorList IS NOT Empty                               ***
+ WHILE SortedFloorList IS NOT Empty                               
     READ RequestedFloor From SortedFloorList 
       IF ElevatorFloor IS RequestedFloor THEN           
         CALL OpenDoor (Elevator)                              
@@ -91,8 +81,8 @@ SEQUENCE OperateElevator (Elevator)
       ELSE IF ElevatorFloor < RequestedFloor THEN 
         CALL MoveUp (Elevator, RequestedFloor)
       END IF 
- END WHILE                                                   ****
- CALL ReturnIdle (Elevator, Floor)                               ****
+ END WHILE                                                  
+ CALL ReturnIdle (Elevator, Floor)                               
 END SEQUENCE
 
 
@@ -100,8 +90,6 @@ SEQUENCE SortFloorList (FloorList, Direction)
     SORT FloorList BY Direction THEN RETURN Floorlist
 END SEQUENCE
 
-
---- Open the doors --- 
 SEQUENCE OpenDoor (Elevator)
     REPEAT 
         OpenDoor 
@@ -109,10 +97,8 @@ SEQUENCE OpenDoor (Elevator)
     UNTIL Door NOT Obstructed 
     CALL DeactivateButton 
     CALL CloseDoor (Elevator)
-    CALL RequestElevator
 END SEQUENCE
 
------ Close the Doors -----
 SEQUENCE CloseDoor (Elevator)
     IF Door IS Closing AND NOT Obstructed AND NOT Overweight 
     THEN
@@ -138,29 +124,30 @@ SEQUENCE Overweight
    END IF 
 END SEQUENCE
 
-
-SEQUENCE MoveDown (Elevator, Floor, RequestedFloor)
+SEQUENCE MoveUp(Elevator, RequestedFloor)
     REPEAT 
-        COMPUTE Floor OR RequestedFloor = ElevatorFloor -1 
-    UNTIL ElevatorFloor IS RequestedFloor OR Floor
-    CALL RequestElevator
+        MoveUp Elevator
+        COMPUTE ElevatorFloor = ElevatorFloor + 1 
+    UNTIL ElevatorFloor IS RequestedFloor
+    CALL OpenDoor
 END SEQUENCE
 
-
-SEQUENCE MoveUp (Elevator, Floor, RequestedFloor)
+SEQUENCE MoveDown (Elevator, RequestedFloor)
     REPEAT 
-        COMPUTE Floor OR RequestedFloor = ElevatorFloor + 1 
-    UNTIL ElevatorFloor IS RequestedFloor OR Floor 
-    CALL RequestElevator
+        MoveDown Elevator
+        COMPUTE ElevatorFloor = ElevatorFloor - 1
+    UNTIL ElevatorFloor IS RequestedFloor 
+    CALL OpenDoor 
+END SEQUENCE
+
+SEQUENCE ReturnIdle (Elevator, Floor)                          
+COMPUTE Minimum Floor FROM Elevators
+COMPUTE Middle Floor FROM Elevators
+ IF TimeOfDay > 15 THEN
+    Idle = Minimum Floor
+   ELSE IF TimeOfDay < 15 THEN 
+    Idle = Middle Floor 
+ END IF 
 END SEQUENCE 
 
-SEQUENCE ReturnIdle (TimeOfDay, Floor)                          ****** 
- IF TimeOfDay > 15 THEN
-    Idle = MINIMUM Floor
-   ELSE IF TimeOfDay < 15 THEN 
-    Idle = AVERAGE Floor 
- END IF 
 
-SEQUENCE CheckWeight (Elevator, Weight)
- COMPUTE Weight 
- IF Weight > MAX Weight THEN
