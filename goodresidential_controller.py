@@ -62,8 +62,8 @@ class elevatorController:
         floors = []
         self.column = column(elevators, floors)
 
-    def callElevator(self, floorNumber, direction):
-        print("callElevator")
+    def requestElevator(self, floorNumber, direction):
+        print("requestElevator")
         print("FloorNumber = " + str(floorNumber))
         print("Direction = " + str(direction))
         elevator = self.findElevator(floorNumber, direction)
@@ -95,8 +95,8 @@ class elevatorController:
         return self.shortestFloorList()
         
 
-    def requestElevator(self, elevator, requestedFloor):
-        print("RequestElevator")
+    def requestFloor(self, elevator, requestedFloor):
+        print("requestFloor")
         print("Elevator = " + str(elevator.elevatorNumber))
         print("RequestedFloor = " + str(requestedFloor))
         elevator.floorList.append(requestedFloor)
@@ -189,11 +189,11 @@ class elevatorController:
 
 elevators = [elevator("stopped", "up", 4, "one"), elevator("stopped", "down", 8, "two")]
 controller = elevatorController(10, 2, elevators) 
-controller.callElevator(4, "down")
+controller.requestElevator(4, "down")
 elevators[0].floorList = [5,6,9]
-elevators[1].floorList = [7,5]
+#elevators[1].floorList = [7,5]
 #controller.findElevator (9, "down" )
-controller.requestElevator (elevators[0], 6)
+controller.requestFloor (elevators[0], 6)
 
 #each elevator has 10 floor buttons, 2 open/close door buttons, 
 #controller.operateElevator (elevators[1])
