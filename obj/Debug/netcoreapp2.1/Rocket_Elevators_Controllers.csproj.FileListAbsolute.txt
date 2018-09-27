@@ -1,0 +1,11 @@
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/bin/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.deps.json
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/bin/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.runtimeconfig.json
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/bin/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.runtimeconfig.dev.json
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/bin/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.dll
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/bin/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.pdb
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.csprojAssemblyReference.cache
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.csproj.CoreCompileInputs.cache
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.AssemblyInfoInputs.cache
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.AssemblyInfo.cs
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.dll
+/Users/frederiquegrenier/projects/Rocket_Elevators_Controllers/obj/Debug/netcoreapp2.1/Rocket_Elevators_Controllers.pdb
